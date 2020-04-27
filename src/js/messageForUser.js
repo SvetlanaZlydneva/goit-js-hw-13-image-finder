@@ -14,7 +14,7 @@ export default {
   },
   finishList() {
     PNotify.info({
-      text: 'You looked at all the images found. Enter new data to search',
+      text: 'You looked at all the images. Enter new data to search',
     });
   },
 };
