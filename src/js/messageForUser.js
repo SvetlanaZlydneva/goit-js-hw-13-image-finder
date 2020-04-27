@@ -12,4 +12,9 @@ export default {
   clearAllMesssage() {
     PNotify.closeAll();
   },
+  finishList() {
+    PNotify.info({
+      text: 'You looked at all the images found. Enter new data to search',
+    });
+  },
 };

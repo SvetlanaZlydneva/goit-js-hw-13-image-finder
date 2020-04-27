@@ -3,8 +3,19 @@ export default {
   baseUrl: 'https://pixabay.com/api/',
   key: '&key=16188386-9c486355758a5fe84f7a70228',
   page: 1,
+  totalQuery: null,
+  countQuery: null,
   set query(search) {
     this.searchQuery = search;
+  },
+  get total() {
+    return this.totalQuery;
+  },
+  set count(count) {
+    this.countQuery = count;
+  },
+  get count() {
+    return this.countQuery;
   },
   pageReset() {
     this.page = 1;
@@ -18,10 +29,13 @@ export default {
   fullUrl() {
     return this.baseUrl + this.parameters() + this.key;
   },
-  async fetch(load = false) {
-    return load
-      ? (this.pageIncrement(),
-        await axios.get(this.fullUrl()).then(response => response.data.hits))
-      : await axios.get(this.fullUrl()).then(response => response.data);
+  async fetch() {
+    return await axios
+      .get(this.fullUrl())
+      .then(response => response.data)
+      .then(data => {
+        this.totalQuery = data.total;
+        return data.hits;
+      });
   },
 };

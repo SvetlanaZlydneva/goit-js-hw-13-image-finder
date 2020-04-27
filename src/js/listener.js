@@ -1,17 +1,16 @@
 import refs from './refs';
 import api from './apiService';
-import updateImagesMarckup from './updateImagesMarckup';
 import message from './messageForUser';
 import * as basicLightbox from 'basiclightbox';
 import '../css/basicLightbox.scss';
-import lazyLoad from './lazyLoad';
+import imageLoader from './imageLoader';
 
 const listener = {
   submit(event) {
     event.preventDefault();
-    api.query = event.target.firstElementChild.value;
+    const value = event.target.firstElementChild.value;
     this.reset();
-    this.fetch();
+    imageLoader(value);
   },
   reset() {
     refs.gallery.innerHTML = '';
@@ -19,21 +18,8 @@ const listener = {
     api.pageReset();
     message.clearAllMesssage();
   },
-  fetch() {
-    api.fetch().then(data => {
-      if (data.total > 0) {
-        message.success(data.total);
-        updateImagesMarckup(data.hits);
-        lazyLoad();
-      } else {
-        message.error();
-      }
-    });
-  },
   showLargeImage(event) {
-    if (event.target.nodeName !== 'IMG') {
-      return;
-    }
+    if (event.target.nodeName !== 'IMG') return;
     basicLightbox
       .create(
         `<img src="${event.target.dataset.large}" width="800" height="600">`,
